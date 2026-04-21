@@ -27,6 +27,7 @@ const supabaseUrl =
   process.env.SUPABASE_URL || process.env.NEXT_PUBLIC_SUPABASE_URL;
 const supabaseAnonKey =
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+  process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY ||
   process.env.NEXT_PUBLIC_SUPABASE_PUBLISHABLE_DEFAULT_KEY;
 
 const sendJson = (res, status, data) => {
@@ -51,7 +52,9 @@ const readJsonBody = async (req) => {
 
 const supabaseRequest = async (pathname, options = {}) => {
   if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error("Missing SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY");
+    throw new Error(
+      "Missing SUPABASE_URL and one of NEXT_PUBLIC_SUPABASE_ANON_KEY / NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY"
+    );
   }
 
   const response = await fetch(`${supabaseUrl}${pathname}`, {
